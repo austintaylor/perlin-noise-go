@@ -25,10 +25,10 @@ works, not to provide a production texture-generation toolkit.
 
 ### 1. Establish the Go project
 
-- [ ] Add `go.mod` and a documented command-line entry point.
-- [ ] Define and validate a configuration for output path, pixel dimensions,
+- [x] Add `go.mod` and a documented command-line entry point.
+- [x] Define and validate a configuration for output path, pixel dimensions,
   grid dimensions, seed, palette, direction, and demo enlargement.
-- [ ] Document defaults, examples, and invalid input behavior in `README.md`.
+- [x] Document defaults, examples, and invalid input behavior in `README.md`.
 
 ### 2. Implement the noise sampler
 
