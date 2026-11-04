@@ -42,7 +42,7 @@ func run(args []string, stdout, stderr io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("select palette: %w", err)
 	}
-	img, err := render.Image(cfg.Width, cfg.Height, cfg.GridWidth, cfg.GridHeight, sampler, colors)
+	img, err := render.Image(cfg.Width, cfg.Height, cfg.GridWidth, cfg.GridHeight, sampler, colors, render.Options{Flame: cfg.Flame})
 	if err != nil {
 		return fmt.Errorf("render image: %w", err)
 	}

@@ -12,9 +12,14 @@ import (
 
 const maxPixels = 64_000_000
 
+// Options selects optional shaping of the noise field before color mapping.
+type Options struct {
+	Flame bool
+}
+
 // Image renders a noise field into an NRGBA image. The grid dimensions specify
 // the number of Perlin lattice cells sampled across the image.
-func Image(width, height, gridWidth, gridHeight int, sampler *noise.Sampler, colors palette.Palette) (*image.NRGBA, error) {
+func Image(width, height, gridWidth, gridHeight int, sampler *noise.Sampler, colors palette.Palette, options Options) (*image.NRGBA, error) {
 	if width < 1 || height < 1 || width > maxPixels/height {
 		return nil, fmt.Errorf("image dimensions must be positive and contain at most %d pixels", maxPixels)
 	}
@@ -41,11 +46,26 @@ func Image(width, height, gridWidth, gridHeight int, sampler *noise.Sampler, col
 				noiseY := float64(y) * float64(gridHeight) / float64(height)
 				for x := 0; x < width; x++ {
 					noiseX := float64(x) * float64(gridWidth) / float64(width)
-					img.SetNRGBA(x, y, colors.ColorForNoise(sampler.Sample(noiseX, noiseY)))
+					value := sampler.Sample(noiseX, noiseY)
+					if options.Flame {
+						value = flameValue(value, y, height)
+					}
+					img.SetNRGBA(x, y, colors.ColorForNoise(value))
 				}
 			}
 		}(yStart, yEnd)
 	}
 	group.Wait()
 	return img, nil
+}
+
+func flameValue(value float64, y, height int) float64 {
+	// A one-row image represents the hot base.
+	depth := 1.0
+	if height > 1 {
+		depth = float64(y) / float64(height-1)
+	}
+	// Taper noise at both ends to keep the base hot and the top cool.
+	intensity := depth + 2*depth*(1-depth)*value
+	return 2*max(0, min(1, intensity)) - 1
 }

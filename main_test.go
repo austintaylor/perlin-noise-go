@@ -5,12 +5,45 @@ import (
 	"errors"
 	"flag"
 	"image"
+	"image/color"
 	"image/png"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/austintaylor/perlin-noise-go/internal/palette"
 )
+
+func TestRunWritesShapedFlamePNG(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "flame.png")
+	if err := run([]string{"-output", path, "-width", "23", "-height", "31",
+		"-palette", "fire", "-flame", "-direction-angle", "90", "-direction-stretch", "4"},
+		&bytes.Buffer{}, &bytes.Buffer{}); err != nil {
+		t.Fatal(err)
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+	img, err := png.Decode(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+	colors, err := palette.Preset("fire")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for x := 0; x < 23; x++ {
+		if got := color.NRGBAModel.Convert(img.At(x, 0)); got != colors.ColorAt(0) {
+			t.Fatalf("top pixel %d = %v, want coolest palette color", x, got)
+		}
+		if got := color.NRGBAModel.Convert(img.At(x, 30)); got != colors.ColorAt(1) {
+			t.Fatalf("bottom pixel %d = %v, want hottest palette color", x, got)
+		}
+	}
+}
 
 func TestRunWritesPNG(t *testing.T) {
 	outputPath := filepath.Join(t.TempDir(), "clouds.png")

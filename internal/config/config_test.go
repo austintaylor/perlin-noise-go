@@ -12,7 +12,7 @@ func TestParseDefaults(t *testing.T) {
 	}
 	if cfg.Output != "perlin.png" || cfg.Width != 512 || cfg.Height != 512 ||
 		cfg.GridWidth != 8 || cfg.GridHeight != 8 || cfg.Seed != 1 ||
-		cfg.Palette != "clouds" || cfg.DirectionAngle != 0 ||
+		cfg.Palette != "clouds" || cfg.Flame || cfg.DirectionAngle != 0 ||
 		cfg.DirectionStretch != 1 || cfg.Demo || cfg.DemoScale != 32 {
 		t.Fatalf("unexpected defaults: %+v", cfg)
 	}
@@ -23,7 +23,7 @@ func TestParseOptions(t *testing.T) {
 		"-output", "flames.png",
 		"-width", "640", "-height", "480",
 		"-grid-width", "20", "-grid-height", "12",
-		"-seed", "42", "-palette", "fire",
+		"-seed", "42", "-palette", "fire", "-flame",
 		"-direction-angle", "90", "-direction-stretch", "2.5",
 		"-demo", "-demo-scale", "16",
 	}
@@ -33,7 +33,7 @@ func TestParseOptions(t *testing.T) {
 	}
 	if cfg.Output != "flames.png" || cfg.Width != 640 || cfg.Height != 480 ||
 		cfg.GridWidth != 20 || cfg.GridHeight != 12 || cfg.Seed != 42 ||
-		cfg.Palette != "fire" || cfg.DirectionAngle != 90 ||
+		cfg.Palette != "fire" || !cfg.Flame || cfg.DirectionAngle != 90 ||
 		cfg.DirectionStretch != 2.5 || !cfg.Demo || cfg.DemoScale != 16 {
 		t.Fatalf("options not applied: %+v", cfg)
 	}

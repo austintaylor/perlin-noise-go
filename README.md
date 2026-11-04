@@ -29,6 +29,21 @@ go run . -output fire.png -palette fire \
   -direction-angle 90 -direction-stretch 2.5
 ```
 
+For a hot base that cools toward the top, add `-flame`:
+
+```sh
+go run . -output flames.png -width 800 -height 1000 -palette fire -flame \
+  -grid-width 14 -grid-height 10 -seed 42 \
+  -direction-angle 90 -direction-stretch 4
+```
+
+Flame shaping combines a bottom-to-top intensity gradient with noise, tapering
+the noise at both ends. The bottom row uses the highest palette value and the
+top row the lowest; a one-row image uses the highest. Intermediate values
+fluctuate to create irregular tongues rather than a uniform fade. This is a
+static procedural approximation, not a physical fire simulation. The palette
+and direction remain independent controls; `-palette fire` alone is unchanged.
+
 The `-demo` option is planned but not implemented yet. Once available, it will
 render the noise grid enlarged, with each cell scaled to `-demo-scale` pixels.
 Demo image dimensions will be derived from the grid size and scale; `-width`
@@ -43,6 +58,7 @@ and `-height` apply to regular images.
 | `-grid-width`, `-grid-height` | `8` | Noise grid dimensions in cells |
 | `-seed` | `1` | Seed for deterministic noise generation |
 | `-palette` | `clouds` | Palette preset: `clouds` or `fire` |
+| `-flame` | `false` | Hot base with intensity decreasing toward the top |
 | `-direction-angle` | `0` | Noise direction angle in degrees |
 | `-direction-stretch` | `1` | Stretch factor along the noise direction |
 | `-demo` | `false` | Render an enlarged grid demonstration |

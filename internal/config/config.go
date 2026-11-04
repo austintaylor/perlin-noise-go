@@ -21,6 +21,7 @@ type Config struct {
 	GridHeight       int
 	Seed             int64
 	Palette          string
+	Flame            bool
 	DirectionAngle   float64
 	DirectionStretch float64
 	Demo             bool
@@ -39,6 +40,7 @@ func Parse(args []string, output io.Writer) (Config, error) {
 	flags.IntVar(&cfg.GridHeight, "grid-height", 8, "noise grid height in cells")
 	flags.Int64Var(&cfg.Seed, "seed", 1, "random seed")
 	flags.StringVar(&cfg.Palette, "palette", "clouds", "color palette: clouds or fire")
+	flags.BoolVar(&cfg.Flame, "flame", false, "add a hot base and bottom-to-top cooling (combine with -palette fire)")
 	flags.Float64Var(&cfg.DirectionAngle, "direction-angle", 0, "noise direction angle in degrees")
 	flags.Float64Var(&cfg.DirectionStretch, "direction-stretch", 1, "stretch along the noise direction")
 	flags.BoolVar(&cfg.Demo, "demo", false, "render an enlarged grid demonstration")
