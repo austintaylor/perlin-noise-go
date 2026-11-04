@@ -36,7 +36,7 @@ func TestCloudImageIsRepeatableAndMapsLayeredNoise(t *testing.T) {
 			if c.A != 255 {
 				t.Fatal("cloud image must be opaque")
 			}
-			want := colors.ColorForNoise(1.7 * cloudField(sampler, float64(x)*4/160, float64(y)*3/100))
+			want := colors.ColorForNoise(1.7 * fractalField(sampler, float64(x)*4/160, float64(y)*3/100))
 			if c != want {
 				t.Fatalf("pixel (%d, %d) = %v, want direct noise mapping %v", x, y, c, want)
 			}
@@ -69,7 +69,7 @@ func TestCloudFieldIncludesFineDetail(t *testing.T) {
 		t.Fatal(err)
 	}
 	x, y := 0.37, 1.21
-	value := cloudField(sampler, x, y)
+	value := fractalField(sampler, x, y)
 	if math.IsNaN(value) || math.IsInf(value, 0) {
 		t.Fatal("cloud field must be finite")
 	}

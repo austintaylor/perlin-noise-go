@@ -51,8 +51,8 @@ func Image(width, height, gridWidth, gridHeight int, sampler *noise.Sampler, col
 				for x := 0; x < width; x++ {
 					noiseX := float64(x) * float64(gridWidth) / float64(width)
 					value := sampler.Sample(noiseX, noiseY)
-					if options.Clouds {
-						value = 1.7 * cloudField(sampler, noiseX, noiseY)
+					if options.Clouds || options.Flame {
+						value = 1.7 * fractalField(sampler, noiseX, noiseY)
 					}
 					if options.Flame {
 						value = flameValue(value, y, height)

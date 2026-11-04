@@ -2,8 +2,8 @@ package render
 
 import "github.com/austintaylor/perlin-noise-go/internal/noise"
 
-// Fractal noise adds progressively smaller features to the broad cloud shapes.
-func cloudField(sampler *noise.Sampler, x, y float64) float64 {
+// Fractal noise adds progressively smaller features to the broad shapes.
+func fractalField(sampler *noise.Sampler, x, y float64) float64 {
 	value, amplitude := 0.0, 1.0
 	for octave := 0; octave < 7; octave++ {
 		value += amplitude * sampler.Sample(x, y)

@@ -51,8 +51,9 @@ go run . -output flames.png -width 800 -height 1000 -palette fire -flame \
   -direction-angle 90 -direction-stretch 4
 ```
 
-Flame shaping combines a bottom-to-top intensity gradient with noise, tapering
-the noise at both ends. The bottom row uses the highest palette value and the
+Flame shaping uses the same seven-octave Perlin field and 1.7 contrast multiplier
+as clouds, combined with a bottom-to-top intensity gradient. The noise tapers
+at both ends. The bottom row uses the highest palette value and the
 top row the lowest; a one-row image uses the highest. Intermediate values
 fluctuate to create irregular tongues rather than a uniform fade. This is a
 static procedural approximation, not a physical fire simulation. The palette

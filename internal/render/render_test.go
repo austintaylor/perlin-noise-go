@@ -94,6 +94,45 @@ func TestFlameValueFalloffAndNoise(t *testing.T) {
 	}
 }
 
+func TestFlameImageUsesLayeredNoise(t *testing.T) {
+	sampler, err := noise.New(42, 90, 4)
+	if err != nil {
+		t.Fatal(err)
+	}
+	colors, err := palette.Preset("fire")
+	if err != nil {
+		t.Fatal(err)
+	}
+	first, err := Image(97, 61, 14, 10, sampler, colors, Options{Flame: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	second, err := Image(97, 61, 14, 10, sampler, colors, Options{Flame: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(first.Pix, second.Pix) {
+		t.Fatal("layered flame rendering must be deterministic")
+	}
+	different := 0
+	for y := 0; y < 61; y++ {
+		for x := 0; x < 97; x++ {
+			nx, ny := float64(x)*14/97, float64(y)*10/61
+			want := colors.ColorForNoise(flameValue(1.7*fractalField(sampler, nx, ny), y, 61))
+			if got := first.NRGBAAt(x, y); got != want {
+				t.Fatalf("pixel (%d, %d) = %v, want layered flame color %v", x, y, got, want)
+			}
+			old := colors.ColorForNoise(flameValue(sampler.Sample(nx, ny), y, 61))
+			if want != old {
+				different++
+			}
+		}
+	}
+	if different < 1000 {
+		t.Fatalf("expected layered detail to change the interior, got %d changed pixels", different)
+	}
+}
+
 func TestImageMatchesUnshapedSampler(t *testing.T) {
 	img := renderTestImage(t, 31, 19, 7, 4, 17)
 	sampler, err := noise.New(17, 0, 1)
