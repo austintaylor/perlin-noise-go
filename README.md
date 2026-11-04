@@ -5,8 +5,8 @@ noise. It is intended as a small, approachable demonstration of the algorithm.
 
 ## Status
 
-The CLI configuration and validation are in place. Noise generation and PNG
-rendering are not implemented yet.
+The CLI configuration and seeded, directional Perlin noise sampler are in
+place. Palette mapping and PNG rendering are not implemented yet.
 
 ## Run
 

@@ -32,11 +32,11 @@ works, not to provide a production texture-generation toolkit.
 
 ### 2. Implement the noise sampler
 
-- [ ] Implement seeded 2D gradient Perlin noise with an immutable permutation
+- [x] Implement seeded 2D gradient Perlin noise with an immutable permutation
   table after initialization.
-- [ ] Add directional sampling controls so the sampled pattern can be stretched
+- [x] Add directional sampling controls so the sampled pattern can be stretched
   or oriented without changing the underlying noise algorithm.
-- [ ] Test repeatability for a fixed seed, variation across seeds, and expected
+- [x] Test repeatability for a fixed seed, variation across seeds, and expected
   sample bounds.
 
 ### 3. Add palette mapping
