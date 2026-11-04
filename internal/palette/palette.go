@@ -19,6 +19,12 @@ type Palette struct {
 	stops []Stop
 }
 
+// Valid reports whether the palette has valid endpoint stops.
+func (p Palette) Valid() bool {
+	return len(p.stops) >= 2 && p.stops[0].Position == 0 &&
+		p.stops[len(p.stops)-1].Position == 1
+}
+
 // New creates a palette from stops at strictly increasing positions.
 // Stops must include both endpoints: 0 and 1.
 func New(stops []Stop) (Palette, error) {

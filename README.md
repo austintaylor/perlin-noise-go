@@ -6,8 +6,8 @@ noise. It is intended as a small, approachable demonstration of the algorithm.
 ## Status
 
 The CLI configuration, seeded and directional Perlin noise sampler, and
-`clouds`/`fire` palette mapping are in place. PNG rendering is not implemented
-yet.
+`clouds`/`fire` palette mapping are in place. The CLI writes regular PNG images;
+enlarged demo rendering is not implemented yet.
 
 ## Run
 
@@ -15,7 +15,7 @@ yet.
 go run . -help
 ```
 
-Once rendering is implemented, generate a regular image with:
+Generate a regular image with:
 
 ```sh
 go run . -output clouds.png -width 800 -height 600 \
@@ -29,9 +29,10 @@ go run . -output fire.png -palette fire \
   -direction-angle 90 -direction-stretch 2.5
 ```
 
-The `-demo` option will render the noise grid enlarged, with each cell scaled
-to `-demo-scale` pixels. Demo image dimensions are derived from the grid size
-and scale; `-width` and `-height` apply to regular images.
+The `-demo` option is planned but not implemented yet. Once available, it will
+render the noise grid enlarged, with each cell scaled to `-demo-scale` pixels.
+Demo image dimensions will be derived from the grid size and scale; `-width`
+and `-height` apply to regular images.
 
 ## Options
 

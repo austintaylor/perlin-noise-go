@@ -48,12 +48,12 @@ works, not to provide a production texture-generation toolkit.
 
 ### 4. Render PNG output
 
-- [ ] Map noise samples to colors in an `image.NRGBA` and encode PNGs using
+- [x] Map noise samples to colors in an `image.NRGBA` and encode PNGs using
   `image/png`.
-- [ ] Add optional row-chunk parallel rendering. Workers share only immutable
+- [x] Add optional row-chunk parallel rendering. Workers share only immutable
   sampler/palette data and write to disjoint output rows; avoid per-pixel
   goroutines and shared mutable random state.
-- [ ] Add regular-render tests for dimensions and PNG encoding.
+- [x] Add regular-render tests for dimensions and PNG encoding.
 
 ### 5. Add demonstration mode
 
@@ -64,9 +64,11 @@ works, not to provide a production texture-generation toolkit.
 
 ### 6. Finish CLI integration
 
-- [ ] Wire configuration, validation, rendering, and file output together.
-- [ ] Return useful errors for invalid settings and file/encoding failures.
-- [ ] Add end-to-end CLI examples to `README.md` and verify generated PNGs.
+- [x] Wire regular-image configuration, validation, rendering, and file output
+  together.
+- [x] Return useful errors for invalid settings and file/encoding failures.
+- [x] Add end-to-end CLI examples to `README.md` and verify generated PNGs.
+- [ ] Integrate demo mode after the demonstration renderer is implemented.
 
 ## Completion criteria
 
