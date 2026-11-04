@@ -22,6 +22,7 @@ type Config struct {
 	Seed             int64
 	Palette          string
 	Flame            bool
+	Clouds           bool
 	DirectionAngle   float64
 	DirectionStretch float64
 	Demo             bool
@@ -41,6 +42,7 @@ func Parse(args []string, output io.Writer) (Config, error) {
 	flags.Int64Var(&cfg.Seed, "seed", 1, "random seed")
 	flags.StringVar(&cfg.Palette, "palette", "clouds", "color palette: clouds or fire")
 	flags.BoolVar(&cfg.Flame, "flame", false, "add a hot base and bottom-to-top cooling (combine with -palette fire)")
+	flags.BoolVar(&cfg.Clouds, "clouds", false, "render layered clouds with sky, density and directional lighting")
 	flags.Float64Var(&cfg.DirectionAngle, "direction-angle", 0, "noise direction angle in degrees")
 	flags.Float64Var(&cfg.DirectionStretch, "direction-stretch", 1, "stretch along the noise direction")
 	flags.BoolVar(&cfg.Demo, "demo", false, "render an enlarged grid demonstration")
@@ -59,6 +61,12 @@ func Parse(args []string, output io.Writer) (Config, error) {
 
 // Validate checks configuration values and resource limits.
 func (cfg Config) Validate() error {
+	if cfg.Flame && cfg.Clouds {
+		return fmt.Errorf("flame and clouds modes cannot be combined")
+	}
+	if cfg.Clouds && cfg.Palette != "clouds" {
+		return fmt.Errorf("clouds mode requires -palette clouds")
+	}
 	if cfg.Output == "" {
 		return fmt.Errorf("output path must not be empty")
 	}

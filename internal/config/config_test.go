@@ -12,9 +12,19 @@ func TestParseDefaults(t *testing.T) {
 	}
 	if cfg.Output != "perlin.png" || cfg.Width != 512 || cfg.Height != 512 ||
 		cfg.GridWidth != 8 || cfg.GridHeight != 8 || cfg.Seed != 1 ||
-		cfg.Palette != "clouds" || cfg.Flame || cfg.DirectionAngle != 0 ||
+		cfg.Palette != "clouds" || cfg.Flame || cfg.Clouds || cfg.DirectionAngle != 0 ||
 		cfg.DirectionStretch != 1 || cfg.Demo || cfg.DemoScale != 32 {
 		t.Fatalf("unexpected defaults: %+v", cfg)
+	}
+}
+
+func TestParseCloudMode(t *testing.T) {
+	cfg, err := Parse([]string{"-clouds"}, io.Discard)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !cfg.Clouds {
+		t.Fatal("cloud mode was not enabled")
 	}
 }
 
@@ -45,6 +55,8 @@ func TestParseRejectsInvalidOptions(t *testing.T) {
 		args []string
 	}{
 		{name: "unknown palette", args: []string{"-palette", "lava"}},
+		{name: "conflicting modes", args: []string{"-clouds", "-flame"}},
+		{name: "clouds with fire palette", args: []string{"-clouds", "-palette", "fire"}},
 		{name: "zero width", args: []string{"-width", "0"}},
 		{name: "excessive pixel count", args: []string{"-width", "8192", "-height", "8192"}},
 		{name: "invalid stretch", args: []string{"-direction-stretch", "0"}},

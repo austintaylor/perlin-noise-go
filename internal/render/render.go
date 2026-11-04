@@ -14,12 +14,16 @@ const maxPixels = 64_000_000
 
 // Options selects optional shaping of the noise field before color mapping.
 type Options struct {
-	Flame bool
+	Flame  bool
+	Clouds bool
 }
 
 // Image renders a noise field into an NRGBA image. The grid dimensions specify
 // the number of Perlin lattice cells sampled across the image.
 func Image(width, height, gridWidth, gridHeight int, sampler *noise.Sampler, colors palette.Palette, options Options) (*image.NRGBA, error) {
+	if options.Flame && options.Clouds {
+		return nil, fmt.Errorf("flame and clouds modes cannot be combined")
+	}
 	if width < 1 || height < 1 || width > maxPixels/height {
 		return nil, fmt.Errorf("image dimensions must be positive and contain at most %d pixels", maxPixels)
 	}
@@ -46,6 +50,10 @@ func Image(width, height, gridWidth, gridHeight int, sampler *noise.Sampler, col
 				noiseY := float64(y) * float64(gridHeight) / float64(height)
 				for x := 0; x < width; x++ {
 					noiseX := float64(x) * float64(gridWidth) / float64(width)
+					if options.Clouds {
+						img.SetNRGBA(x, y, cloudColor(sampler, noiseX, noiseY, float64(y)/float64(height)))
+						continue
+					}
 					value := sampler.Sample(noiseX, noiseY)
 					if options.Flame {
 						value = flameValue(value, y, height)

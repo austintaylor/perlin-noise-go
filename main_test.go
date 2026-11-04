@@ -74,6 +74,26 @@ func TestRunWritesPNG(t *testing.T) {
 	}
 }
 
+func TestRunWritesCloudPNG(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "clouds.png")
+	if err := run([]string{"-output", path, "-clouds", "-width", "80", "-height", "50",
+		"-grid-width", "4", "-grid-height", "3"}, &bytes.Buffer{}, &bytes.Buffer{}); err != nil {
+		t.Fatal(err)
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+	img, err := png.Decode(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if img.Bounds() != image.Rect(0, 0, 80, 50) {
+		t.Fatalf("unexpected cloud image bounds: %v", img.Bounds())
+	}
+}
+
 func TestRunRejectsUnsupportedDemo(t *testing.T) {
 	err := run([]string{"-demo"}, &bytes.Buffer{}, &bytes.Buffer{})
 	if err == nil || !strings.Contains(err.Error(), "demo mode is not implemented yet") {

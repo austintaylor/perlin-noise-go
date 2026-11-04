@@ -29,6 +29,20 @@ go run . -output fire.png -palette fire \
   -direction-angle 90 -direction-stretch 2.5
 ```
 
+For detailed clouds against blue sky:
+
+```sh
+go run . -output clouds.png -width 800 -height 500 -clouds \
+  -grid-width 4 -grid-height 3 -seed 42
+```
+
+`-clouds` combines seven diminishing Perlin octaves, maps the field to cloud
+density, and blends lit cloud colors over a blue sky gradient. A nearby noise
+sample estimates shadowing from the upper left. This is a stylized 2D
+approximation, not volumetric rendering. It requires the clouds palette and
+cannot be combined with `-flame`. Without it, the original single-layer palette
+mapping is unchanged.
+
 For a hot base that cools toward the top, add `-flame`:
 
 ```sh
@@ -59,6 +73,7 @@ and `-height` apply to regular images.
 | `-seed` | `1` | Seed for deterministic noise generation |
 | `-palette` | `clouds` | Palette preset: `clouds` or `fire` |
 | `-flame` | `false` | Hot base with intensity decreasing toward the top |
+| `-clouds` | `false` | Layered cloud density, sky and lighting |
 | `-direction-angle` | `0` | Noise direction angle in degrees |
 | `-direction-stretch` | `1` | Stretch factor along the noise direction |
 | `-demo` | `false` | Render an enlarged grid demonstration |
