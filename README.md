@@ -5,8 +5,9 @@ noise. It is intended as a small, approachable demonstration of the algorithm.
 
 ## Status
 
-The CLI configuration and seeded, directional Perlin noise sampler are in
-place. Palette mapping and PNG rendering are not implemented yet.
+The CLI configuration, seeded and directional Perlin noise sampler, and
+`clouds`/`fire` palette mapping are in place. PNG rendering is not implemented
+yet.
 
 ## Run
 
@@ -51,5 +52,9 @@ contain at most 64 million pixels. Grid dimensions must be between 1 and 8192
 cells per side. Demo output is subject to the same image limits. Direction
 stretch must be between 0.1 and 100. Invalid values and unexpected positional
 arguments are reported as errors.
+
+Noise values in `[-1, 1]` map linearly to palette positions `[0, 1]`; values
+outside that range are clamped to the nearest palette endpoint. Palette colors
+are interpolated between stops in standard RGBA channels.
 
 Font rendering and numeric cell labels are out of scope for v1.

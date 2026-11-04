@@ -41,10 +41,10 @@ works, not to provide a production texture-generation toolkit.
 
 ### 3. Add palette mapping
 
-- [ ] Define palette stops and interpolation independently from noise sampling.
-- [ ] Add `clouds` and `fire` presets, with clear handling of noise-to-palette
+- [x] Define palette stops and interpolation independently from noise sampling.
+- [x] Add `clouds` and `fire` presets, with clear handling of noise-to-palette
   value mapping.
-- [ ] Test interpolation endpoints and preset selection.
+- [x] Test interpolation endpoints and preset selection.
 
 ### 4. Render PNG output
 
