@@ -9,7 +9,7 @@ import (
 	"github.com/austintaylor/perlin-noise-go/internal/palette"
 )
 
-func TestCloudImageIsRepeatableAndHasSkyAndHighlights(t *testing.T) {
+func TestCloudImageIsRepeatableAndMapsLayeredNoise(t *testing.T) {
 	sampler, err := noise.New(42, 0, 1)
 	if err != nil {
 		t.Fatal(err)
@@ -29,23 +29,23 @@ func TestCloudImageIsRepeatableAndHasSkyAndHighlights(t *testing.T) {
 	if !bytes.Equal(first.Pix, second.Pix) {
 		t.Fatal("cloud rendering must be deterministic")
 	}
-	sky, highlights := 0, 0
+	darkest, brightest := uint8(255), uint8(0)
 	for y := 0; y < 100; y++ {
 		for x := 0; x < 160; x++ {
 			c := first.NRGBAAt(x, y)
 			if c.A != 255 {
 				t.Fatal("cloud image must be opaque")
 			}
-			if int(c.B)-int(c.R) > 80 {
-				sky++
+			want := colors.ColorForNoise(1.7 * cloudField(sampler, float64(x)*4/160, float64(y)*3/100))
+			if c != want {
+				t.Fatalf("pixel (%d, %d) = %v, want direct noise mapping %v", x, y, c, want)
 			}
-			if c.R > 230 && c.G > 230 && c.B > 230 {
-				highlights++
-			}
+			darkest = min(darkest, c.R)
+			brightest = max(brightest, c.R)
 		}
 	}
-	if sky < 1000 || highlights < 1000 {
-		t.Fatalf("expected visible sky and bright clouds, got %d sky and %d highlight pixels", sky, highlights)
+	if int(brightest)-int(darkest) < 150 {
+		t.Fatalf("expected broad tonal variation, got red-channel range %d..%d", darkest, brightest)
 	}
 	otherSampler, err := noise.New(43, 0, 1)
 	if err != nil {

@@ -50,11 +50,10 @@ func Image(width, height, gridWidth, gridHeight int, sampler *noise.Sampler, col
 				noiseY := float64(y) * float64(gridHeight) / float64(height)
 				for x := 0; x < width; x++ {
 					noiseX := float64(x) * float64(gridWidth) / float64(width)
-					if options.Clouds {
-						img.SetNRGBA(x, y, cloudColor(sampler, noiseX, noiseY, float64(y)/float64(height)))
-						continue
-					}
 					value := sampler.Sample(noiseX, noiseY)
+					if options.Clouds {
+						value = 1.7 * cloudField(sampler, noiseX, noiseY)
+					}
 					if options.Flame {
 						value = flameValue(value, y, height)
 					}
